@@ -16,6 +16,13 @@ void APawnTurret::BeginPlay()
 	// To avoid expensive GamePlayStatics check, get the PlayerPawn casted to APawnTank
 	// because this is a single Player game with the APawnTank being the Player
 	PlayerPawn = Cast<APawnTank>(UGameplayStatics::GetPlayerPawn(this, 0));
+
+}
+
+void APawnTurret::HandleDestruction()
+{
+	Super::HandleDestruction();
+	Destroy();
 }
 
 // Called every frame
@@ -23,6 +30,12 @@ void APawnTurret::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!PlayerPawn || ReturnDistanceToPlayer()>FireRange)
+	{
+		return;
+	}
+
+	RotateTurret(PlayerPawn->GetActorLocation());
 }
 
 void APawnTurret::CheckFireCondition()
@@ -36,8 +49,7 @@ void APawnTurret::CheckFireCondition()
 	// if Player is range then Fire()
 	if (ReturnDistanceToPlayer() <= FireRange)
 	{
-		// Fire()
-		UE_LOG(LogTemp, Warning, TEXT("Fire Condition Checked: FIRE..."));
+		Fire();
 	}
 	
 }

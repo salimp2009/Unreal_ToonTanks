@@ -2,13 +2,15 @@
 
 
 #include "HealthComponent.h"
+#include "ToonTanks/GameModes/TankGameModeBase.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
 }
@@ -19,16 +21,32 @@ void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	Health = DefaultHealth;
+	GameModeRef = Cast<ATankGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::TakeDamage);
 	
 }
 
-
-// Called every frame
-void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	if (Damage == 0.0f || Health<=0.0f)
+	{
+		return;
+	}
 
-	// ...
+	Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
+
+	if (Health <= 0.0f)
+	{
+		if (GameModeRef)
+		{
+			GameModeRef->ActorDied(GetOwner());
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Health Component has no reference to GameMode!"));
+		}
+	}
 }
+
 
