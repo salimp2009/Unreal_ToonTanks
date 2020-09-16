@@ -1,5 +1,4 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -8,6 +7,7 @@
 
 class APawnTurret;
 class APawnTank;
+class APlayerControllerBase;
 
 UCLASS()
 class TOONTANKS_API ATankGameModeBase : public AGameModeBase
@@ -17,6 +17,7 @@ class TOONTANKS_API ATankGameModeBase : public AGameModeBase
 private:
 	APawnTank* PlayerTank;
 	int32 TargetTurrets = 0;
+	APlayerControllerBase* PlayerControllerRef;
 
 	int32 GetTargetTurretCount();
 	void HandleGameStart();
@@ -26,8 +27,11 @@ public:
 	void ActorDied(AActor* DeadActor);
 
 protected:
-	virtual void BeginPlay() override;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Game Loop")
+	int32 StartDelay=3;
 
+	virtual void BeginPlay() override;
+	
 	UFUNCTION(BlueprintImplementableEvent)
 	void GameStart();
 

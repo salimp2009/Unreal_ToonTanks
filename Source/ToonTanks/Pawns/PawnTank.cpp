@@ -27,7 +27,6 @@ void APawnTank::HandleDestruction()
 {
 	Super::HandleDestruction();
 	// TODO: HidePlayer(); 
-	// TODO: Create New Function to stop movement
 }
 
 // Called every frame
