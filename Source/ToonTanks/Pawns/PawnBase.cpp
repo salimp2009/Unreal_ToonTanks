@@ -3,6 +3,8 @@
 #include "Components/CapsuleComponent.h"
 #include "PawnBase.h"
 #include "ToonTanks/Actors/ProjectileBase.h"
+#include "ToonTanks/Components/HealthComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -22,6 +24,9 @@ APawnBase::APawnBase()
 
 	ProjectileSpawnPoint= CreateDefaultSubobject<USceneComponent>(TEXT("Projectile Spawn Point"));
 	ProjectileSpawnPoint->SetupAttachment(TurretMesh);
+
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health Component"));
+	
 }
 
 
@@ -55,12 +60,9 @@ void APawnBase::Fire()
 
 void APawnBase::HandleDestruction()
 {
-	// Play Death effects particle, sound and camera shake
+	// TODO: Play Death effects particle(done), sound and camera shake
+	UGameplayStatics::SpawnEmitterAtLocation(this, DeathParticle, GetActorLocation());  // function takes FRotation if needed ; if not passed then it is 0
 
-	// child classes override
-	// PawnTurret; Inform the GameMode Turret died ->Then Destroy() self
-
-	//PawnTank; Inform GameMode Player died ->Then Hide() all components && stop movement; Game Over :)
 }
 
 void APawnBase::PawnDestroyed()
