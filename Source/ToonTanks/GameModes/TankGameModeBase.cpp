@@ -30,6 +30,10 @@ void ATankGameModeBase::ActorDied(AActor* DeadActor)
 	else if (APawnTurret* DestroyedTurret = Cast<APawnTurret>(DeadActor))
 	{
 		DestroyedTurret->HandleDestruction();
+		
+		// TODO: TESTING FOR CHALLENGE PURPOSES ; added a Blueprint of each Turrets value; create a widget to display
+		ScorePlayer += 50;							
+
 		if (--TargetTurrets == 0)
 		{
 			HandleGameOver(true);

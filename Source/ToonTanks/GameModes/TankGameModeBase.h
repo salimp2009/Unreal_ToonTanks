@@ -30,6 +30,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Game Loop")
 	int32 StartDelay=3;
 
+	//TODO: TESTING FOR CHALLENGE PURPOSES ; added a Blueprint of each Turrets value; create a widget to display
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Game Score") 
+	int32 ScorePlayer = 0;
+
 	virtual void BeginPlay() override;
 	
 	UFUNCTION(BlueprintImplementableEvent)

@@ -1,10 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Components/CapsuleComponent.h"
 #include "PawnBase.h"
+#include "Components/CapsuleComponent.h"
 #include "ToonTanks/Actors/ProjectileBase.h"
 #include "ToonTanks/Components/HealthComponent.h"
 #include "Kismet/GameplayStatics.h"
+
 
 
 // Sets default values
@@ -60,9 +61,9 @@ void APawnBase::Fire()
 
 void APawnBase::HandleDestruction()
 {
-	// TODO: Play Death effects particle(done), sound and camera shake
 	UGameplayStatics::SpawnEmitterAtLocation(this, DeathParticle, GetActorLocation());  // function takes FRotation if needed ; if not passed then it is 0
 	UGameplayStatics::SpawnSoundAtLocation(this, DeathSound, GetActorLocation());
+	GetWorld()->GetFirstPlayerController()->ClientPlayCameraShake(DeathShake);
 }
 
 void APawnBase::PawnDestroyed()
